@@ -59,12 +59,12 @@ export default function SignInPage() {
       const { error } = await authClient.signIn.email({
         email: values.email,
         password: values.password,
-        callbackURL: "http://localhost:3000/dashboard",
+        callbackURL: window.location.origin + "/dashboard",
       })
       if (error) {
         setError(error.message || "An error occurred during sign in")
       } else {
-        router.push("http://localhost:3000/dashboard")
+        router.push(window.location.origin + "/dashboard")
       }
     } catch (error: any) {
       setError(error.message || "An unexpected error occurred")
@@ -79,7 +79,7 @@ export default function SignInPage() {
     try {
       const { error } = await authClient.signIn.social({
         provider: "google",
-        callbackURL: "http://localhost:3000/dashboard", // Redirect to dashboard after signin
+        callbackURL: window.location.origin + "/dashboard", // Redirect to dashboard after signin
       })
       if (error) {
         setError(error.message || "An error occurred during Google sign in")
