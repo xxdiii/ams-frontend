@@ -1,8 +1,6 @@
 import { Metadata } from "next"
 import Link from "next/link"
-
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import Image from "next/image"
 import { UserAuthForm } from "./user-auth-form"
 
 export const metadata: Metadata = {
@@ -21,7 +19,7 @@ export default function AuthenticationPage() {
           />
           <div className="absolute inset-0 bg-black/40" />
           <div className="relative z-20 flex items-center text-lg font-medium">
-            <img src="/logo.svg" alt="Logo" className="mr-2 h-10 w-auto lg:h-14 text-white" />
+            <Image src="/logo.svg" alt="Logo" width={56} height={56} className="mr-2 h-10 w-auto lg:h-14 text-white" />
           </div>
           <div className="relative z-20 mt-auto hidden lg:block">
             <blockquote className="leading-normal text-balance">

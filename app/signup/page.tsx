@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react';
+import Image from 'next/image';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -20,20 +21,67 @@ const departments = [
   { value: 'it', label: 'IT' }
 ];
 
+type FormData = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  gender: string;
+  password: string;
+  confirmPassword: string;
+  admissionNumber: string;
+  admissionYear: string;
+  candidateCode: string;
+  department: string;
+  dateOfBirth: string;
+  relation: string;
+  designation: string;
+  dateOfJoining: string;
+};
+
+const FormField = ({ id, label, type = 'text', placeholder, value, error, onChange }: { id: keyof FormData; label: string; type?: string; placeholder?: string; value: string; error?: string; onChange: (e: React.ChangeEvent<HTMLInputElement>) => void; }) => (
+  <div className="space-y-2">
+    <Label htmlFor={id}>{label}</Label>
+    <Input id={id} type={type} placeholder={placeholder} value={value}
+      onChange={onChange} name={id} />
+    {error && <p className="text-sm text-red-500">{error}</p>}
+  </div>
+);
+
+const SelectField = ({ id, label, value, error, options, placeholder, onValueChange }: { id: keyof FormData; label: string; value: string; error?: string; options: { value: string; label: string }[]; placeholder: string; onValueChange: (value: string) => void; }) => (
+  <div className="space-y-2">
+    <Label htmlFor={id}>{label}</Label>
+    <Select value={value} onValueChange={onValueChange}>
+      <SelectTrigger><SelectValue placeholder={placeholder} /></SelectTrigger>
+      <SelectContent position="popper" sideOffset={5}>
+        {options.map((opt) => (
+          <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+    {error && <p className="text-sm text-red-500">{error}</p>}
+  </div>
+);
+
 export default function SignUpPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedRole, setSelectedRole] = useState<'student' | 'teacher' | 'parent'>('student');
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     firstName: '', lastName: '', email: '', phone: '', gender: '', password: '', confirmPassword: '',
     admissionNumber: '', admissionYear: '', candidateCode: '', department: '', dateOfBirth: '',
     relation: '', designation: '', dateOfJoining: '',
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
 
-  const handleInputChange = (field: string, value: string) => {
+  const handleInputChange = (field: keyof FormData, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors(prev => ({ ...prev, [field]: '' }));
+  };
+
+  const handleInputEvent = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    handleInputChange(name as keyof FormData, value);
   };
 
   const validateForm = () => {
@@ -84,8 +132,12 @@ export default function SignUpPage() {
       console.log('Form submitted:', { ...formData, role: selectedRole });
       await new Promise(resolve => setTimeout(resolve, 2000));
       alert('Account created successfully!');
-    } catch (err: any) {
-      setError(err.message || 'An unexpected error occurred');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An unexpected error occurred');
+      }
     } finally {
       setIsLoading(false);
     }
@@ -97,36 +149,16 @@ export default function SignUpPage() {
     try {
       await new Promise(resolve => setTimeout(resolve, 1500));
       alert('Google sign-up initiated!');
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during Google sign up');
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred during Google sign up');
+      }
     } finally {
       setIsLoading(false);
     }
   };
-
-  const FormField = ({ id, label, type = 'text', placeholder, value, error }: any) => (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
-      <Input id={id} type={type} placeholder={placeholder} value={value}
-        onChange={(e) => handleInputChange(id, e.target.value)} />
-      {error && <p className="text-sm text-red-500">{error}</p>}
-    </div>
-  );
-
-  const SelectField = ({ id, label, value, error, options, placeholder }: any) => (
-    <div className="space-y-2">
-      <Label htmlFor={id}>{label}</Label>
-      <Select value={value} onValueChange={(val: string) => handleInputChange(id, val)}>
-        <SelectTrigger><SelectValue placeholder={placeholder} /></SelectTrigger>
-        <SelectContent position="popper" sideOffset={5}>
-          {options.map((opt: any) => (
-            <SelectItem key={opt.value} value={opt.value}>{opt.label}</SelectItem>
-          ))}
-        </SelectContent>
-      </Select>
-      {error && <p className="text-sm text-red-500">{error}</p>}
-    </div>
-  );
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden">
@@ -139,7 +171,7 @@ export default function SignUpPage() {
           <CardHeader className="space-y-1">
             <div className="absolute bottom-4 left-4 text-sm text-gray-500">Built with 🔥 by μlearn UCEK</div>
             <div className="flex items-center justify-center">
-              <img src="/logo.svg" alt="Logo" className="h-14 w-auto" />
+              <Image src="/logo.svg" alt="Logo" width={56} height={56} className="h-14 w-auto" />
             </div>
             <CardTitle className="text-2xl font-bold text-center">Sign up</CardTitle>
             <CardDescription className="text-center">Create your account by selecting your role</CardDescription>
@@ -173,43 +205,43 @@ export default function SignUpPage() {
 
               {/* Common Fields */}
               <div className="grid grid-cols-2 gap-3">
-                <FormField id="firstName" label="First Name" placeholder="John" value={formData.firstName} error={errors.firstName} />
-                <FormField id="lastName" label="Last Name" placeholder="Doe" value={formData.lastName} error={errors.lastName} />
+                <FormField id="firstName" label="First Name" placeholder="John" value={formData.firstName} error={errors.firstName} onChange={handleInputEvent} />
+                <FormField id="lastName" label="Last Name" placeholder="Doe" value={formData.lastName} error={errors.lastName} onChange={handleInputEvent} />
               </div>
-              <FormField id="email" label="Email" type="email" placeholder="mail@example.com" value={formData.email} error={errors.email} />
-              <FormField id="phone" label="Phone Number" type="tel" placeholder="+91 98765 43210" value={formData.phone} error={errors.phone} />
+              <FormField id="email" label="Email" type="email" placeholder="mail@example.com" value={formData.email} error={errors.email} onChange={handleInputEvent} />
+              <FormField id="phone" label="Phone Number" type="tel" placeholder="+91 98765 43210" value={formData.phone} error={errors.phone} onChange={handleInputEvent} />
               <SelectField id="gender" label="Gender" value={formData.gender} error={errors.gender} placeholder="Select gender"
-                options={[{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }, { value: 'other', label: 'Other' }]} />
+                options={[{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }, { value: 'other', label: 'Other' }]} onValueChange={(value) => handleInputChange('gender', value)} />
 
               {/* Role-Specific Fields */}
               {selectedRole === 'student' && (
                 <>
                   <div className="grid grid-cols-2 gap-3">
-                    <FormField id="admissionNumber" label="Admission No." placeholder="29CSE555" value={formData.admissionNumber} error={errors.admissionNumber} />
-                    <FormField id="admissionYear" label="Admission Year" type="number" placeholder="2026" value={formData.admissionYear} error={errors.admissionYear} />
+                    <FormField id="admissionNumber" label="Admission No." placeholder="29CSE555" value={formData.admissionNumber} error={errors.admissionNumber} onChange={handleInputEvent} />
+                    <FormField id="admissionYear" label="Admission Year" type="number" placeholder="2026" value={formData.admissionYear} error={errors.admissionYear} onChange={handleInputEvent} />
                   </div>
-                  <FormField id="candidateCode" label="Candidate Code" placeholder="41529505078" value={formData.candidateCode} error={errors.candidateCode} />
-                  <SelectField id="department" label="Department" value={formData.department} error={errors.department} placeholder="Select department" options={departments} />
-                  <FormField id="dateOfBirth" label="Date of Birth" type="date" value={formData.dateOfBirth} error={errors.dateOfBirth} />
+                  <FormField id="candidateCode" label="Candidate Code" placeholder="41529505078" value={formData.candidateCode} error={errors.candidateCode} onChange={handleInputEvent} />
+                  <SelectField id="department" label="Department" value={formData.department} error={errors.department} placeholder="Select department" options={departments} onValueChange={(value) => handleInputChange('department', value)} />
+                  <FormField id="dateOfBirth" label="Date of Birth" type="date" value={formData.dateOfBirth} error={errors.dateOfBirth} onChange={handleInputEvent} />
                 </>
               )}
 
               {selectedRole === 'parent' && (
                 <SelectField id="relation" label="Relation" value={formData.relation} error={errors.relation} placeholder="Select relation"
-                  options={[{ value: 'father', label: 'Father' }, { value: 'mother', label: 'Mother' }, { value: 'guardian', label: 'Guardian' }]} />
+                  options={[{ value: 'father', label: 'Father' }, { value: 'mother', label: 'Mother' }, { value: 'guardian', label: 'Guardian' }]} onValueChange={(value) => handleInputChange('relation', value)} />
               )}
 
               {selectedRole === 'teacher' && (
                 <>
-                  <FormField id="designation" label="Designation" placeholder="Assistant Professor" value={formData.designation} error={errors.designation} />
+                  <FormField id="designation" label="Designation" placeholder="Assistant Professor" value={formData.designation} error={errors.designation} onChange={handleInputEvent} />
                   <SelectField id="department" label="Department" value={formData.department} error={errors.department} placeholder="Select department"
-                    options={[{ value: 'cs', label: 'Computer Science' }, { value: 'ec', label: 'Electronics' }, { value: 'me', label: 'Mechanical' }, { value: 'ce', label: 'Civil' }]} />
-                  <FormField id="dateOfJoining" label="Date of Joining" type="date" value={formData.dateOfJoining} error={errors.dateOfJoining} />
+                    options={[{ value: 'cs', label: 'Computer Science' }, { value: 'ec', label: 'Electronics' }, { value: 'me', label: 'Mechanical' }, { value: 'ce', label: 'Civil' }]} onValueChange={(value) => handleInputChange('department', value)} />
+                  <FormField id="dateOfJoining" label="Date of Joining" type="date" value={formData.dateOfJoining} error={errors.dateOfJoining} onChange={handleInputEvent} />
                 </>
               )}
 
-              <FormField id="password" label="Password" type="password" placeholder="••••••••" value={formData.password} error={errors.password} />
-              <FormField id="confirmPassword" label="Confirm Password" type="password" placeholder="••••••••" value={formData.confirmPassword} error={errors.confirmPassword} />
+              <FormField id="password" label="Password" type="password" placeholder="••••••••" value={formData.password} error={errors.password} onChange={handleInputEvent} />
+              <FormField id="confirmPassword" label="Confirm Password" type="password" placeholder="••••••••" value={formData.confirmPassword} error={errors.confirmPassword} onChange={handleInputEvent} />
 
               <Button className="w-full bg-black text-white hover:bg-gray-800" type="submit" disabled={isLoading}>
                 {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
