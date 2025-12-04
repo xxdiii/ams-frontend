@@ -1,5 +1,3 @@
-# UCEK Attendance Management System
-
 <div align="center">
   
   <img src="screenshots/logo.png" alt="UCEK Attendance App Logo" width="200"/>
