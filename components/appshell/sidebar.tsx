@@ -16,7 +16,7 @@ const bottomItems = [
 
 export function DashboardSidebar({ user }: { user: { name: string; email: string; avatarUrl?: string } }) {
   return (
-    <aside className="hidden md:flex flex-col w-64 h-screen bg-background border-r px-4 py-6 gap-4">
+    <aside className={`flex flex-col w-64 h-screen bg-background border-r px-4 py-6 gap-4`}>
       <div className="flex items-center gap-2 mb-6 px-2">
         <span className="font-bold text-xl tracking-tight p-2 pr-4 pl-4 bg-primary rounded-md">AMS</span>
       </div>
