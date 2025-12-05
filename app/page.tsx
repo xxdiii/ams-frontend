@@ -1,40 +1,45 @@
 "use client";
 
-import Image from "next/image";
 import { authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { Loader2 } from "lucide-react";
+import Logo from "@/components/logo";
 
 export default function Home() {
-  const { data: session, isPending } = authClient.useSession();
+    const { data: session, isPending } = authClient.useSession();
+    const router = useRouter();
 
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <div className="w-full flex justify-end mb-8">
-            {isPending ? (
-                <div className="text-sm text-zinc-500">Loading session...</div>
-            ) : session ? (
-                <div className="flex items-center gap-4">
-                    <div className="text-sm">
-                        Logged in as <span className="font-bold">{session.user.email}</span>
-                    </div>
-                    <Button 
-                        variant="outline" 
-                        onClick={async () => {
-                            await authClient.signOut();
-                        }}
-                    >
-                        Sign Out
-                    </Button>
+    useEffect(() => {
+        if (session != null && !isPending) {
+            router.replace("/dashboard");
+        }
+    }, [session, isPending, router]);
+
+    if (isPending || session != null) {
+        return (
+            <div className="flex min-h-screen items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </div>
+        )
+    }
+
+    return (
+        <div className="flex min-h-screen flex-col items-center justify-center bg-zinc-50 font-sans dark:bg-black">
+            <Logo />
+
+            <main className="flex w-full max-w-3xl flex-col items-center justify-center px-16 py-8 bg-white dark:bg-black">
+                <div className="flex items-center gap-4 mt-4">
+                    <Link href="/signin">
+                        <Button className="bg-secondary">Sign In</Button>
+                    </Link>
+                    <Link href="/signup">
+                        <Button className="bg-secondary">Sign Up</Button>
+                    </Link>
                 </div>
-            ) : (
-                <Link href="/signin">
-                    <Button>Sign In</Button>
-                </Link>
-            )}
+            </main>
         </div>
-      </main>
-    </div>
-  );
+    );
 }
