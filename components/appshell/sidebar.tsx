@@ -1,6 +1,7 @@
 import { Home, Calendar, FileText, Settings, LogOut, Target, LibraryBig, User } from "lucide-react";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import Logo from "../logo";
 
 const navItems = [
   { label: "Dashboard", icon: Home, href: "/dashboard" },
@@ -17,9 +18,7 @@ const bottomItems = [
 export function DashboardSidebar({ user }: { user: { name: string; email: string; avatarUrl?: string } }) {
   return (
     <aside className={`flex flex-col w-64 h-screen bg-background border-r px-4 py-6 gap-4`}>
-      <div className="flex items-center gap-2 mb-6 px-2">
-        <span className="font-bold text-xl tracking-tight p-2 pr-4 pl-4 bg-primary rounded-md">AMS</span>
-      </div>
+      <Logo />
       <nav className="flex-1 flex flex-col gap-2">
         {navItems.map((item) => (
           <Link key={item.label} href={item.href} className="flex items-center gap-3 rounded-md px-2 py-2 text-sm font-medium hover:bg-muted transition-colors">
