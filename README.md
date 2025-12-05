@@ -1,8 +1,6 @@
 <div align="center">
   
   <img src="screenshots/logo.png" alt="UCEK Attendance App Logo" width="500"/>
-  
-  ### Built by [MuLearn Club (ucek)](https://mulearn.uck.ac.in/)
 
   [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
   [![Version](https://img.shields.io/badge/version-1.0.0-green.svg)](https://github.com/mulearnucek/ams-frontend)
@@ -12,9 +10,9 @@
 ## 📋 Overview
 > **⚠️ Note**: This project is currently under active development. Features and functionality may change.
 
-The UCEK Attendance Management System is a comprehensive platform developed by the MuLearn Club at University College of Engineering Kariavattom. This application streamlines academic tracking and management for students, teachers, and parents, providing real-time access to attendance records, grades, assignments, and more.
+The UCEK Attendance Management System is a comprehensive platform developed by the μLearn UCEK. This application streamlines academic tracking and management for students, teachers, and parents, providing real-time access to attendance records, grades, assignments, and more.
 
-  #### 🌐 [Visit Live Website](https://ams.mulearn.uck.ac.in/) (Work in Progress)
+  #### 🌐 [Visit Live Website](https://ams.mulearn.uck.ac.in/) (dev)
 
 ## ✨ Features
 
@@ -75,13 +73,13 @@ npm run dev
 Create a `.env` file in the root directory:
 
 ```env
-NEXT_PUBLIC_API_URL={your url}
+NEXT_PUBLIC_API_URL=api.example.com
 ```
 
 ## 🛠️ Technology Stack
 
 - **Frontend**: React.js / Next.js / Node.js
-- **Backend**: Bun.js / Fastify
+- **Backend**: Fastify / Node.js
 - **Database**: MongoDB
 - **UI Framework**: Shadcn Ui / Tailwind CSS
 
@@ -131,7 +129,7 @@ We welcome contributions from the UCEK community! Please read our [Contributing 
 
 
 <div align="center">
-  Made with ❤️ by MuLearn Club, UCEK
+  Made with ❤️ by μLearn UCEK
   
   [Report Bug](https://github.com/mulearnucek/ams-frontend/issues) · [Request Feature](https://github.com/mulearnucek/ams-frontend/issues)
 </div>
