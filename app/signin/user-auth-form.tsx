@@ -21,7 +21,7 @@ const formSchema = z.object({
 
 type UserAuthFormProps = React.HTMLAttributes<HTMLDivElement>
 
-export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
+export function SignInUserAuthForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState(false)
   const [error, setError] = React.useState<string | null>(null)
   const router = useRouter()
@@ -125,15 +125,15 @@ export function UserAuthForm({ className, ...props }: UserAuthFormProps) {
         </form>
       </Form>
       <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t border-gray-400" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-background px-2 text-muted-foreground">
-                  Or continue with
-                </span>
-              </div>
-            </div>
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t border-gray-400" />
+        </div>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
       <Button variant="outline" type="button" disabled={isLoading} onClick={onGoogleSignIn} className="w-full">
         {isLoading ? (
           <Loader2 className="mr-2 h-4 w-4 animate-spin" />

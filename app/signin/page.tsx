@@ -1,7 +1,7 @@
 import { Metadata } from "next"
 import Link from "next/link"
 import Image from "next/image"
-import { UserAuthForm } from "./user-auth-form"
+import { SignInUserAuthForm } from "./user-auth-form"
 import Logo from "@/components/logo"
 
 export const metadata: Metadata = {
@@ -31,7 +31,7 @@ export default function AuthenticationPage() {
                 Enter your email to signin.
               </p>
             </div>
-            <UserAuthForm />
+            <SignInUserAuthForm />
             <p className="px-6 text-center text-xs text-muted-foreground">
               By clicking continue, you agree to our{" "}
               <Link href="/terms" className="underline underline-offset-4 hover:text-primary">
